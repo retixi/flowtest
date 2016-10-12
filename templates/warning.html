@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}WARNING{% endblock %}
+{% block inner %}
+
+        <form action="/warning/" method="post">
+        <div class="row" style="font-family: 'Microsoft YaHei UI';">
+            <div class="col-md-4">
+            {% csrf_token %}
+                <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-calendar"></span>
+                   </span>
+                   <input style="font-size: 18px;font-family: 'Microsoft YaHei UI Light'" autocomplete="off" list="datelist" type="text" name="filter1" class="form-control" placeholder="日期选择" aria-describedby="basic-addon1">
+                </div>
+                </div>
+            <div class="col-md-3">
+                    <input type="submit" class="btn btn-success">
+                    <datalist id="datelist">
+                            {% for each in datedrop_list %}
+                            <option value="{{ each.last_date|date:"Y-m-d"}}">
+                            {% endfor %}
+                </div>
+        <div class="col-md-3 col-md-offset-2">
+        <button type="button" class="btn btn-danger" style="font-family: 'Microsoft YaHei UI';font-size: 16px">
+             共有超限端口{{ overload_list.count }}个
+        </button>
+        </div>
+        </div>
+<br>
+        </form>
+
+    <div class="row" style="font-family: 'Microsoft YaHei UI'">
+
+            <div class="col-md-12">
+             <div class="panel panel-default">
+                    <div class="panel-heading">
+                         越限端口列表
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>区域</th>
+                                        <th>业务类型</th>
+                                        <th>端口名称</th>
+                                        <th>端口带宽</th>
+                                        <th>峰值利用率</th>
+                                        <th>日期</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                 {% for each in overload_list %}
+                                    <tr class="odd gradeX">
+                                        <td align="middle">{{ each.city }}</td>
+                                        <td align="middle">{{ each.cate }}</td>
+                                        <td align="middle">{{ each.port_name }}</td>
+                                        <td align="middle">{{ each.band_width }}</td>
+                                        <td align="middle">{{ each.bu_peak|floatformat:2 }}</td>
+                                        <td align="right">{{ each.last_date|date:"Y-m-d" }}</td>
+                                    </tr>
+                                 {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,107 @@
+﻿{% extends "base.html" %}
+{% block title %}LIST{% endblock %}
+{% block inner %}
+
+<form action="/index/" method="post">
+<div class="row" style="font-family: 'Microsoft YaHei UI';">
+    {% csrf_token %}
+    <div class="col-md-4">
+
+        <div class="input-group">
+           <span class="input-group-addon" id="sizing-addon1">
+               <span class="glyphicon glyphicon-calendar"></span>
+           </span>
+           <input style="font-size: 18px;font-family: 'Microsoft YaHei UI Light'" autocomplete="off" list="datelist" type="text" name="filter1" class="form-control"
+                  placeholder={{ date_str }}
+                  aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+    <div class="col-md-4">
+
+        <div class="input-group">
+           <span class="input-group-addon" id="sizing-addon1">
+               <span class="glyphicon glyphicon-cog"></span>
+           </span>
+           <input style="font-size: 18px;font-family: 'Microsoft YaHei UI Light'" autocomplete="off" list="topcountlist" type="text" name="filter2" class="form-control" placeholder="每页显示条数" aria-describedby="basic-addon1">
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+        <input type="submit" class="btn btn-success">
+        <datalist id="datelist">
+                {% for each in datedrop_list %}
+                <option value="{{ each.last_date|date:"Y-m-d"}}">
+                {% endfor %}
+    </div>
+        <datalist id="topcountlist">
+                <option value=10>
+                <option value=20>
+                <option value=30>
+                <option value=50>
+                <option value=100>
+
+
+
+
+</div>
+
+
+
+</form>
+<br>
+<div class="row" style="font-size: 16px;font-family: 'Microsoft YaHei UI';">
+    <div class="col-md-12">
+    <div class="pannel panel-default">
+        <div class="panel-heading">
+         UNI端口流量详表
+        </div>
+
+         <div class="panel panel-body">
+                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <th align="middle">城市</th>
+                    <th align="middle">业务类型</th>
+                    <th align="middle">端口名称</th>
+                    <th align="middle">端口速率</th>
+                    <th align="middle">流量</th>
+                    <th align="middle">峰值利用率</th>
+                    <th align="middle">忙时利用率</th>
+                    <th align="middle">均值利用率</th>
+                    <th align="middle">统计时间</th>
+                    {% for each in fb %}
+                    <tr>
+                        <td align="middle">{{ each.city }}</td>
+                        <td align="middle">{{ each.cate }}</td>
+                        <td align="middle">{{ each.port_name }}</td>
+                        <td align="middle">{{ each.band_width }}</td>
+                        <td align="right">{{ each.flow_data| floatformat  }}</td>
+                        <td align="middle">{{ each.bu_peak|floatformat:2 }}</td>
+                        <td align="middle">{{ each.bu_busy_avg|floatformat:2 }}</td>
+                        <td align="middle">{{ each.bu_avg|floatformat:2 }}</td>
+                        <td align="right">{{ each.last_date|date:"Y-m-d" }}</td>
+                    </tr>
+
+                    {% endfor %}
+        </table>
+         </div>
+                <div class="main-content-pagitor">
+{% if fb.has_previous %}
+<a href="?page={{ fb.previous_page_number }}">< Pre</a>
+{% endif %}
+<span> {{ fb.number }} of {{ fb.paginator.num_pages }} </span>
+{% if fb.has_next %}
+<a href="?page={{ fb.next_page_number }}">Next ></a>
+{% endif %}
+</div>
+
+          </div>
+    </div>
+    </div>
+</div>
+
+                <!-- /. ROW  -->
+
+
+    {% endblock %}

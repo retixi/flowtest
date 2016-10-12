@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}LOG{% endblock %}
+{% block inner %}
+    <div class="panel panel-default">
+        <div class="panel-body" style="font-size: 20px;line-height: 30px">
+            <form method="post" action="">
+            {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-offset-1">
+                    <h1 style="font-family: 'Microsoft YaHei UI'">
+                        菜鸟的建站日记
+                    </h1>
+                    </div>
+
+                </div>
+                <div class="row" style="margin-top: 20px">
+                    <div class="col-md-10 col-md-offset-1">
+                    <input type="text" class="form-control" placeholder="标题" name="title" autocomplete="off">
+                    </div>
+                </div></br>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                    <input type="text" class="form-control" placeholder="内容" name="inner" autocomplete="off" style="height: 40px">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px">
+                    <div class="col-lg-2 col-md-offset-10">
+                       <input type="submit" class="btn btn-primary" value="增加"/>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    {% for each in build_log %}
+    <div class="panel panel-default">
+    <div class="panel-body" style="font-size: 20px;line-height: 30px">
+      <p>{{ each.id }}.{{ each.title }}</p>
+      <p>{{ each.inner }}</p>
+    </div>
+    </div>
+    {% endfor %}
+
+
+
+
+
+
+
+
+
+{% endblock %}

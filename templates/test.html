@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}TEST{% endblock %}
+{% block inner %}
+<div class="panel panel-default">
+    <div class="panel-body" style="font-size: 20px;line-height: 30px">
+        1.distinct方法：
+        <p>&nbsp;&nbsp;正确打开方式：FlowTable.objects.values('cate').distinct()</p>
+        <p>&nbsp;&nbsp;错误打开方式：FlowTable.objects.distinct('cate')</p>
+        {% for each in listbox %}
+            <p>{{ each.cate }}</p>
+        {% endfor %}
+
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body" style="font-size: 20px;line-height: 30px">
+        2.raw sql：
+        <p>&nbsp;&nbsp;在模型中使用sql语句,请注意一定要在sql语句中包含主键字段</p>
+        {% for each in sum_cate %}
+            <p>{{ each.cate }}:{{ each.flow_data }}</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

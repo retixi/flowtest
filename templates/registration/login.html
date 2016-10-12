@@ -1,0 +1,49 @@
+{% extends "base_log.html" %}
+
+
+
+{% block inner %}
+  <div class="login-logo" >
+    数据分析系统
+  </div>
+  <div class="login-box-body">
+    <p class="login-box-msg">请输入账号登陆</p>
+
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+      <div class="form-group has-feedback">
+
+        <input type="text" class="form-control" placeholder="用户名" name="username" autocomplete="off" style="font-size: 24px;height: 40px">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" placeholder="密码" name="password" autocomplete="off" style="font-size: 24px;height: 40px">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+        <br/>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+           <a href="#">忘记密码？</a><br>
+           <a href="register.html" class="text-center">注册用户</a>
+          </div>
+        </div>
+
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">登&nbsp;&nbsp;&nbsp;录</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,520 @@
+{% extends 'base.html' %}
+{% block title %}DASHBOARD{% endblock %}
+{% block inner %}
+  <div class="row">
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-aqua">
+    <div class="inner">
+      <h3>{{ flowdata }}</h3>
+
+      <p>流量（TB）</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-area-chart"></i>
+    </div>
+    <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-green">
+    <div class="inner">
+      <h3>{{ peakdata }}</h3>
+
+      <p>峰值利用率</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-bar-chart"></i>
+    </div>
+    <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-yellow">
+    <div class="inner">
+      <h3>{{ busyavgdata }}</h3>
+
+      <p>忙时利用率</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-line-chart"></i>
+    </div>
+    <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-red">
+    <div class="inner">
+      <h3>{{ avgdata }}</h3>
+
+      <p>均值利用率</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-pie-chart"></i>
+    </div>
+    <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+</div>
+  <div class="row">
+
+    <div class="page-header">
+
+
+        <form action="/chart/" method="post">
+                {% csrf_token %}
+
+           <div class="row">
+               <div class="col-md-3 col-md-offset-1">
+
+               <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-th-list"></span>
+                   </span>
+                   <input autocomplete="off" list="catelist" type="text" name="filter1" class="form-control" placeholder="类型选择" aria-describedby="basic-addon1">
+                        <datalist id="catelist">
+                            {% for each in catedroplist %}
+                            <option value="{{ each }}">
+                            {% endfor %}
+
+                        </datalist>
+               </div>
+               </div>
+
+               <div class="col-md-3">
+
+
+               <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-home"></span>
+                   </span>
+                   <input autocomplete="off" list="citylist" type="text" name="filter2" class="form-control" placeholder="区域选择" aria-describedby="basic-addon1">
+                        <datalist id="citylist">
+                            {% for each in citydroplist %}
+                            <option value="{{ each }}">
+                            {% endfor %}
+                   </div>
+                </div>
+
+                <div class="col-md-3">
+
+
+               <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-calendar"></span>
+                   </span>
+                   <input autocomplete="off" list="datelist" type="text" name="filter3" class="form-control" placeholder="日期选择" aria-describedby="basic-addon1">
+                        <datalist id="datelist">
+                            {% for each in datedroplist %}
+                            <option value="{{ each|date:"Y-m-d"}}">
+                            {% endfor %}
+                   </div>
+                </div>
+                <div class="col-md-1">
+               <input class="btn btn-success btn-sm" type="submit" value="确 认" style="font-size: 16px;font-family: 'Microsoft YaHei UI'">
+                </div>
+           </div>
+
+
+
+        </form>
+
+    </div>
+
+  </div>
+    <!-- /. ROW  -->
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="chart1"></div>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-5">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div id="chart2"></div>
+            </div>
+        </div>
+        </div>
+
+    </div>
+        <!-- /. ROW  -->
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="chart3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="chart4"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="chart5"></div>
+            </div>
+        </div>
+    </div>
+        <div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="chart6"></div>
+        </div>
+    </div>
+</div>
+        <div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="chart7"></div>
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    <!-- /. ROW  -->
+
+    <div class="row">
+    <div class="col-md-12">
+
+        </div>
+    </div>
+    <!-- /. ROW  -->
+    {% endblock %}
+
+{% block js %}
+
+
+$(function () {
+    $('#chart1').highcharts({
+        title: {
+            text: '各月流量趋势',
+            x: -20 //center
+        },
+        subtitle: {
+            text: '来源：流量分析工具',
+            x: -20
+        },
+        credits:{
+            enabled:false
+        },
+        xAxis: {
+            categories: [{% for each in datename %}
+            '{{ each }}',
+            {% endfor %}
+            ]
+        },
+        yAxis: {
+            title: {
+                text: '流量（TB）'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: 'TB'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'pw流量',
+            data: {{ datedata }}
+        }]
+    });
+});
+
+$(function () {
+    $('#chart2').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: '各类型业务流量占比'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [
+
+                {% for each in cateflow %}
+                    {name:'{{ each.name }}',y: {{each.data}}},
+                {% endfor %}
+
+
+            ]
+        }]
+    });
+});
+
+
+
+
+
+        $(function () {
+    $('#chart3').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '各地业务流量对比'
+        },
+        xAxis: {
+            categories: [
+                {% for each in cityname %}'{{ each }}',{% endfor %}
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '流量（TB）'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+            {
+            name: 'pw流量',
+            data: {{ citydata }}
+
+        }]
+    });
+});
+
+
+        $(function () {
+    $('#chart5').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: '各区域业务峰值利用率对比'
+        },
+        xAxis: {
+            categories: [
+                {% for each in city_peak_name %}'{{ each }}',{% endfor %}
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+            {
+            name: '峰值利用率',
+            data: {{ city_peak_data }}
+
+        }]
+    });
+});
+
+
+    $(function () {
+    $('#chart4').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: '各地区带宽占比'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [
+
+                {% for each in city_bandwidth %}
+                    {name:'{{ each.name }}',y: {{each.data}}},
+                {% endfor %}
+
+
+            ]
+        }]
+    });
+});
+
+
+            $(function () {
+    $('#chart6').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: '各区域业务忙时均值利用率对比'
+        },
+        xAxis: {
+            categories: [
+                {% for each in city_busyavg_name %}'{{ each }}',{% endfor %}
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+            {
+            name: '忙时均值利用率',
+            data: {{ city_busyavg_data }}
+
+        }]
+    });
+});
+
+            $(function () {
+    $('#chart7').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: '各区域业务均值利用率对比'
+        },
+        xAxis: {
+            categories: [
+                {% for each in city_avg_name %}'{{ each }}',{% endfor %}
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+            {
+            name: '均值利用率',
+            data: {{ city_avg_data }}
+
+        }]
+    });
+});
+
+    {% endblock %}
